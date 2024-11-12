@@ -113,7 +113,7 @@ public class Buat extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if (tfUser.getText().equals("") || tfPass.getText().equals("")) {
+         if (tfUser.getText().equals("") || tfPass.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Isi semua data");
         } else {
             String user, pw;
@@ -124,21 +124,26 @@ public class Buat extends javax.swing.JFrame {
             EntityManager em = emf.createEntityManager();
             em.getTransaction().begin();
 
-            Pw x = new Pw();
-            x.setUsername(user);
-            x.setPassword(pw);
-            em.persist(x);
+            Pw y = em.find(Pw.class, user);
+            if (y != null) {
+                JOptionPane.showMessageDialog(null, "Username sudah ada, gunakan username lain");
+                bersih();
+            } else {
+                Pw x = new Pw();
+                x.setUsername(user);
+                x.setPassword(pw);
+                em.persist(x);
 
-            em.getTransaction().commit();
-            JOptionPane.showMessageDialog(null, "Sukses dibuat");
+                em.getTransaction().commit();
+                JOptionPane.showMessageDialog(null, "Sukses dibuat");
 
-            bersih();
+                bersih();
+                Login z = new Login();
+                z.setVisible(true);
+                this.dispose();
+            }
             em.close();
             emf.close();
-
-            Login y = new Login();
-            y.setVisible(true);
-            this.dispose();
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
